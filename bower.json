@@ -1,0 +1,21 @@
+{
+  "name": "mozzarella",
+  "authors": [
+    "Oran Fry <oran@emerg.co>"
+  ],
+  "description": "A website columns library",
+  "main": "js/mozzarella.js",
+  "keywords": [
+    "stretchy",
+    "columns"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
