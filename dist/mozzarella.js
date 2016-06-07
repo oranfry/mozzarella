@@ -10,8 +10,6 @@ $.fn.mozzarella = function(options) {
         var width = container.innerWidth(), // (w.innerWidth || e.clientWidth || g.clientWidth) - scrollbarWidth,
             noCols = 1;
 
-        console.log('itemWidth', options.itemWidth);
-
         for (var _noCols = 1; _noCols < 100; _noCols++) {
             if (_noCols * options.itemWidth + (_noCols + 1) * options.margin <= width) {
                 noCols = _noCols;
@@ -20,7 +18,8 @@ $.fn.mozzarella = function(options) {
             }
         }
 
-        var workingItemWidth = Math.floor((width - ((noCols - 1) * options.margin)) / noCols);
+        var workingItemWidth = Math.floor((width - ((noCols - 1) * options.margin)) / noCols),
+            extraMargin = width - workingItemWidth * noCols - (noCols - 1) * options.margin;
 
         $('#x-' + options.id).remove();
 
@@ -30,14 +29,14 @@ $.fn.mozzarella = function(options) {
 
         var ssHtml = '';
 
+        // set column width
         ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + options.margin + 'px 0 0 ' + options.margin + 'px; } ';
+
+        // remove left margin from first column
         ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n+1) { margin-left: 0; } ';
 
-        if (noCols > 1) {
-            ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n) { margin: ' + options.margin + 'px 0 0 0; float: right; } ';
-        }
-
-        for (var i=1; i<= noCols; i++) {
+        // remove top margin for first row
+        for (var i=1; i <= noCols; i++) {
             if (i > 1) {
                 ssHtml += ', ';
             }
@@ -47,7 +46,16 @@ $.fn.mozzarella = function(options) {
 
         ssHtml += '{ margin-top: 0 } ';
 
-        console.log(ssHtml);
+        // allocate extra pixels across columns to they dont go into last margin
+        for (var i=1; i <= extraMargin; i++) {
+            if (i > 1) {
+                ssHtml += ', ';
+            }
+
+            ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n+' + i + ')';
+        }
+
+        ssHtml += '{width: ' + (workingItemWidth + 1) + 'px; } ';
 
         ss.innerHTML = ssHtml;
 
