@@ -61,8 +61,21 @@ $.fn.mozzarella = function(options) {
 
         document.body.appendChild(ss);
 
+        if (options.filler) {
+            container.find('.filler').remove();
+
+            var noFillers = noCols - container.find('.' + options.itemClass).length % noCols;
+
+            for (var i = 0; i < noFillers; i++) {
+                container.append(
+                    $(typeof options.filler == 'string' && options.filler || '<div>')
+                        .addClass(options.itemClass + ' filler')
+                );
+            }
+        }
+
         if (typeof options.onResize == 'function') {
-            options.onResize();
+            options.onResize(noCols);
         }
 
         if (width != container.innerWidth()) {
