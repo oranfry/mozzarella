@@ -1,17 +1,24 @@
 $.fn.mozzarella = function(options) {
     options = $.extend(
-        {itemWidth: 300, margin: 30, itemClass: 'item', cssPrefix: '', id: ''},
+        {itemDimensions: {width: 300}, margin: 30, itemClass: 'item', cssPrefix: '', id: ''},
         options
     );
 
     var container = this;
 
     function onResize() {
-        var width = container.innerWidth(), // (w.innerWidth || e.clientWidth || g.clientWidth) - scrollbarWidth,
-            noCols = 1;
+        var width = container.innerWidth(),
+            noCols = 1,
+            itemWidth = null;
+
+        if (typeof options.itemDimensions == 'function') {
+            itemDimensions = options.itemDimensions(width);
+        } else {
+            itemDimensions = options.itemDimensions;
+        }
 
         for (var _noCols = 1; _noCols < 100; _noCols++) {
-            if (_noCols * options.itemWidth + (_noCols + 1) * options.margin <= width) {
+            if (_noCols * itemDimensions.width + (_noCols + 1) * options.margin <= width) {
                 noCols = _noCols;
             } else {
                 break;
@@ -31,6 +38,11 @@ $.fn.mozzarella = function(options) {
 
         // set column width
         ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + options.margin + 'px 0 0 ' + options.margin + 'px; } ';
+
+        // maybe set row height
+        if (itemDimensions.height) {
+            ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { height: ' + itemDimensions.height + 'px; }';
+        }
 
         // remove left margin from first column
         ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n+1) { margin-left: 0; } ';
@@ -87,7 +99,7 @@ $.fn.mozzarella = function(options) {
 
     $(window).resize(onResize);
 
-    onResize();
+    setTimeout(onResize, 100);
 
     $(options.cssPrefix + ' .' + options.itemClass).show();
 };
