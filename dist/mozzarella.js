@@ -1,4 +1,6 @@
 $.fn.mozzarella = function(options) {
+    $('html').css('overflow-y', 'scroll');
+
     options = $.extend(
         {itemDimensions: {width: 300}, margin: 30, itemClass: 'item', cssPrefix: '', id: ''},
         options
