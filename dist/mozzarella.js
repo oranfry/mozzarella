@@ -78,13 +78,17 @@ $.fn.mozzarella = function(options) {
         if (options.filler) {
             container.find('.filler').remove();
 
-            var noFillers = noCols - container.find('.' + options.itemClass).length % noCols;
+            var overflow = container.find('.' + options.itemClass).length % noCols;
 
-            for (var i = 0; i < noFillers; i++) {
-                container.append(
-                    $(typeof options.filler == 'string' && options.filler || '<div>')
-                        .addClass(options.itemClass + ' filler')
-                );
+            if (overflow) {
+                var noFillers = noCols - overflow;
+
+                for (var i = 0; i < noFillers; i++) {
+                    container.append(
+                        $(typeof options.filler == 'string' && options.filler || '<div>')
+                            .addClass(options.itemClass + ' filler')
+                    );
+                }
             }
         }
 
