@@ -6,9 +6,12 @@ $.fn.mozzarella = function(options) {
         options
     );
 
-    var container = this;
+    var container = this,
+        resizeTimer = null;
 
     function onResize() {
+        container.css('width', '');
+
         var width = container.innerWidth(),
             noCols = 1,
             itemWidth = null;
@@ -93,19 +96,26 @@ $.fn.mozzarella = function(options) {
         }
 
         if (typeof options.onResize == 'function') {
-            options.onResize(noCols);
+            options.onResize(noCols, workingItemWidth);
         }
+
 
         if (width != container.innerWidth()) {
             setTimeout(function(){
                 onResize();
             }, 10);
+        } else {
+            container.css('width', width + 'px');
         }
     };
 
-    $(window).resize(onResize);
+    $(window).resize(function() {
+        clearTimeout(resizeTimer);
 
-    setTimeout(onResize, 100);
+        resizeTimer = setTimeout(onResize, 50);
+    });
+
+    setTimeout(onResize, 50);
 
     $(options.cssPrefix + ' .' + options.itemClass).show();
 };
