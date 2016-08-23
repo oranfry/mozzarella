@@ -22,16 +22,19 @@ $.fn.mozzarella = function(options) {
             itemDimensions = options.itemDimensions;
         }
 
+
+        var margin = itemDimensions.margin || options.margin;
+
         for (var _noCols = 1; _noCols < 100; _noCols++) {
-            if (_noCols * itemDimensions.width + (_noCols + 1) * options.margin <= width) {
+            if (_noCols * itemDimensions.width + (_noCols + 1) * margin <= width) {
                 noCols = _noCols;
             } else {
                 break;
             }
         }
 
-        var workingItemWidth = Math.floor((width - ((noCols - 1) * options.margin)) / noCols),
-            extraMargin = width - workingItemWidth * noCols - (noCols - 1) * options.margin;
+        var workingItemWidth = Math.floor((width - ((noCols - 1) * margin)) / noCols),
+            extraMargin = width - workingItemWidth * noCols - (noCols - 1) * margin;
 
         $('#x-' + options.id).remove();
 
@@ -42,7 +45,7 @@ $.fn.mozzarella = function(options) {
         var ssHtml = '';
 
         // set column width
-        ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + options.margin + 'px 0 0 ' + options.margin + 'px; } ';
+        ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + margin + 'px 0 0 ' + margin + 'px; } ';
 
         // maybe set row height
         if (itemDimensions.height) {
