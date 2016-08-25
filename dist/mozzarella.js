@@ -2,7 +2,14 @@ $.fn.mozzarella = function(options) {
     $('html').css('overflow-y', 'scroll');
 
     options = $.extend(
-        {itemDimensions: {width: 300}, margin: 30, itemClass: 'item', cssPrefix: '', id: ''},
+        {
+            itemDimensions: {width: 300},
+            margin: 30,
+            itemClass: 'item',
+            cssPrefix: '',
+            id: '',
+            leftColCss: '',
+        },
         options
     );
 
@@ -53,7 +60,7 @@ $.fn.mozzarella = function(options) {
         }
 
         // remove left margin from first column
-        ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n+1) { margin-left: 0; } ';
+        ssHtml += options.cssPrefix + ' .' + options.itemClass + ':nth-child(' + noCols + 'n+1) { margin-left: 0; ' + options.leftColCss +' } ';
 
         // remove top margin for first row
         for (var i=1; i <= noCols; i++) {
