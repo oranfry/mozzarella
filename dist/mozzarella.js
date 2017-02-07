@@ -88,7 +88,7 @@ $.fn.mozzarella = function(options) {
 
         document.body.appendChild(ss);
 
-        if (options.filler) {
+        if (options.filler && noCols > 1) {
             container.find('.filler').remove();
 
             var overflow = container.find('.' + options.itemClass).length % noCols;
