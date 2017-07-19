@@ -9,6 +9,7 @@ $.fn.mozzarella = function(options) {
             cssPrefix: '',
             id: '',
             leftColCss: '',
+            fixAspect: false,
         },
         options
     );
@@ -56,7 +57,8 @@ $.fn.mozzarella = function(options) {
 
         // maybe set row height
         if (itemDimensions.height) {
-            ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { height: ' + itemDimensions.height + 'px; }';
+            var workingHeight = options.fixAspect && (workingItemWidth * itemDimensions.height / itemDimensions.width) || itemDimensions.height;
+            ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { height: ' + workingHeight + 'px; }';
         }
 
         // remove left margin from first column
