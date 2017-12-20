@@ -10,6 +10,8 @@ $.fn.mozzarella = function(options) {
             id: '',
             leftColCss: '',
             fixAspect: false,
+            extraBottomMargin: 0,
+            stretchyPart: 'tile',
         },
         options
     );
@@ -41,8 +43,24 @@ $.fn.mozzarella = function(options) {
             }
         }
 
-        var workingItemWidth = Math.floor((width - ((noCols - 1) * margin)) / noCols),
-            extraMargin = width - workingItemWidth * noCols - (noCols - 1) * margin;
+        var workingItemWidth, extraMargin = 0;
+
+        if (options.stretchyPart == 'tile') {
+            workingItemWidth = Math.floor((width - ((noCols - 1) * margin)) / noCols);
+            workingMargin = margin;
+        } else if (options.stretchyPart == 'margin') {
+            if (noCols == 1) {
+                workingItemWidth = itemDimensions.width;
+                workingMargin = 0;
+            } else {
+                workingItemWidth = itemDimensions.width;
+                workingMargin = Math.floor((width - noCols * itemDimensions.width) / (noCols - 1));
+            }
+        }
+
+        if (noCols != 1) {
+            extraMargin = width - workingItemWidth * noCols - (noCols - 1) * workingMargin;
+        }
 
         $('#x-' + options.id).remove();
 
@@ -53,7 +71,7 @@ $.fn.mozzarella = function(options) {
         var ssHtml = '';
 
         // set column width
-        ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + margin + 'px 0 0 ' + margin + 'px; } ';
+        ssHtml += options.cssPrefix + ' .' + options.itemClass + ' { display: inline-block; float: left; width: ' + workingItemWidth + 'px; margin: ' + (workingMargin + options.extraBottomMargin) + 'px 0 0 ' + workingMargin + 'px; } ';
 
         // maybe set row height
         if (itemDimensions.height) {
